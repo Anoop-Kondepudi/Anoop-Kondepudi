@@ -1,0 +1,38 @@
+name: Refresh profile metrics
+
+on:
+  schedule:
+    - cron: "17 6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: profile-metrics
+  cancel-in-progress: true
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the profile repository
+        uses: actions/checkout@v4
+
+      - name: Generate aggregate metrics
+        env:
+          PROFILE_METRICS_TOKEN: ${{ secrets.PROFILE_METRICS_TOKEN }}
+          PROFILE_METRICS_USER: Anoop-Kondepudi
+        run: python3 scripts/update_metrics.py
+
+      - name: Publish a changed metrics card
+        run: |
+          if git diff --quiet -- assets/metrics.svg; then
+            echo "Metrics are already current."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/metrics.svg
+          git commit -m "chore: refresh profile metrics"
+          git push
