@@ -1,0 +1,3 @@
+# Generated cards live on the orphan `render` branch, not main.
+assets/*.svg
+__pycache__/

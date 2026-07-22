@@ -1,0 +1,12 @@
+{
+  "vercel_requests": 26349411,
+  "vercel_window": "JUL 3-21",
+  "supabase_requests_24h": 2480656,
+  "ai_checks_all_time": 153898,
+  "registered_users": 4915,
+  "llm_tokens": 40273022912,
+  "discord_members_fallback": 30690,
+  "locales": 21,
+  "as_of": "2026-07-21",
+  "sources": "Vercel dashboard edge requests (billing cycle window) · Supabase API gateway last-24h · turnitin.turnitin_submissions count · public.user_profiles count · ccusage totals (Claude Code + Codex, no cost published) · Discord invite API"
+}

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- Hourly LLM-token refresh. Install:
+       cp com.anoop-kondepudi.profile-llm-tokens.plist ~/Library/LaunchAgents/
+       launchctl load ~/Library/LaunchAgents/com.anoop-kondepudi.profile-llm-tokens.plist
+     ProgramArguments path must point at the local clone of this repo. -->
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.anoop-kondepudi.profile-llm-tokens</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/zsh</string>
+    <string>REPO_PATH/scripts/local/refresh-llm-tokens.sh</string>
+  </array>
+  <key>StartInterval</key>
+  <integer>3600</integer>
+  <key>RunAtLoad</key>
+  <true/>
+  <key>StandardOutPath</key>
+  <string>/tmp/profile-llm-tokens.log</string>
+  <key>StandardErrorPath</key>
+  <string>/tmp/profile-llm-tokens.log</string>
+</dict>
+</plist>

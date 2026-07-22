@@ -1,69 +1,38 @@
 <div align="center">
-  <img src="./assets/header.svg" width="100%" alt="Anoop Kondepudi - AI systems and product engineering" />
-</div>
 
-<br />
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Anoop-Kondepudi/Anoop-Kondepudi/render/assets/hero-dark.svg">
+  <img alt="Anoop Kondepudi — engineer building StudySolutions, AI study tools in production" src="https://raw.githubusercontent.com/Anoop-Kondepudi/Anoop-Kondepudi/render/assets/hero-light.svg" width="100%">
+</picture>
 
-I build software at the intersection of **AI, automation, and product engineering**. I like systems that take an ambiguous real-world workflow, make it observable, and carry it all the way to a reliable product.
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Anoop-Kondepudi/Anoop-Kondepudi/render/assets/activity-dark.svg">
+  <img alt="Engineering ledger — commits, lines changed, merged pull requests, and LLM tokens this year, with contribution trend and language mix across public and private repositories (aggregates only)" src="https://raw.githubusercontent.com/Anoop-Kondepudi/Anoop-Kondepudi/render/assets/activity-light.svg" width="100%">
+</picture>
 
-### What I work on
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Anoop-Kondepudi/Anoop-Kondepudi/render/assets/production-dark.svg">
+  <img alt="Production platform stats — millions of requests per day across the edge and API layers, documents processed, and live Discord community size" src="https://raw.githubusercontent.com/Anoop-Kondepudi/Anoop-Kondepudi/render/assets/production-light.svg" width="100%">
+</picture>
 
-- **Agentic workflows** that turn conversations and intent into issues, plans, code, and pull requests.
-- **Production automation** that stays useful when APIs fail, data is messy, and the happy path ends.
-- **Data-rich products** with clear dashboards, maps, and operational tooling.
+<a href="https://studysolutions.app/">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Anoop-Kondepudi/Anoop-Kondepudi/render/assets/studysolutions-dark.svg">
+  <img alt="StudySolutions — AI-powered study platform, live at studysolutions.app" src="https://raw.githubusercontent.com/Anoop-Kondepudi/Anoop-Kondepudi/render/assets/studysolutions-light.svg" width="100%">
+</picture>
+</a>
 
-`TypeScript` / `Next.js` / `React` / `Python` / `PostgreSQL` / `GitHub Actions`
-
-## Selected builds
-
-<table>
-  <tr>
-    <td width="50%" valign="top">
-      <h3><a href="https://github.com/Anoop-Kondepudi/meet2code">Meet2Code</a></h3>
-      <p>A fully agentic meeting-to-PR pipeline: live transcription becomes structured tasks, GitHub issues, implementation plans, generated code, and pull requests.</p>
-      <p><code>Next.js 16</code> <code>Python</code> <code>OpenAI</code> <code>GitHub</code></p>
-    </td>
-    <td width="50%" valign="top">
-      <h3><a href="https://github.com/Anoop-Kondepudi/OpenStreet">OpenStreet</a></h3>
-      <p>A community-first civic platform designed to give residents and city governments one transparent place to understand and act on local data.</p>
-      <p><code>Next.js 15</code> <code>TypeScript</code> <code>Mapbox</code></p>
-    </td>
-  </tr>
-  <tr>
-    <td width="50%" valign="top">
-      <h3><a href="https://github.com/Anoop-Kondepudi/Education-Webscraper-V2">Education Webscraper V2</a></h3>
-      <p>A modernized, more efficient generation of an education-data extraction system, rebuilt to reduce resource usage and improve maintainability.</p>
-      <p><code>Web automation</code> <code>Data extraction</code> <code>APIs</code></p>
-    </td>
-    <td width="50%" valign="top">
-      <h3><a href="https://github.com/Anoop-Kondepudi/continue-dev-nextjs">Continue.dev Rebuild</a></h3>
-      <p>A clean, editable Next.js reconstruction of a static marketing site with typed components, modern animation, and no Webflow lock-in.</p>
-      <p><code>Next.js 15</code> <code>TypeScript</code> <code>GSAP</code></p>
-    </td>
-  </tr>
-</table>
-
-## 2026 engineering ledger
-
-<div align="center">
-  <img src="./assets/metrics.svg" width="100%" alt="Anoop's 2026 GitHub engineering metrics" />
-</div>
-
-<p align="center">
-  <sub>Counts include private activity totals available to the tracker. Private repository names, code, and commit details are never written to this public repository.</sub>
+<p>
+<a href="https://github.com/Anoop-Kondepudi/meet2code"><picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Anoop-Kondepudi/Anoop-Kondepudi/render/assets/meet2code-dark.svg">
+  <img alt="meet2code — agentic meeting-to-PR pipeline" src="https://raw.githubusercontent.com/Anoop-Kondepudi/Anoop-Kondepudi/render/assets/meet2code-light.svg" width="49.4%">
+</picture></a>
+<a href="https://github.com/Anoop-Kondepudi/OpenStreet"><picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Anoop-Kondepudi/Anoop-Kondepudi/render/assets/openstreet-dark.svg">
+  <img alt="OpenStreet — civic data platform" src="https://raw.githubusercontent.com/Anoop-Kondepudi/Anoop-Kondepudi/render/assets/openstreet-light.svg" width="49.4%">
+</picture></a>
 </p>
 
-## How I approach the work
+<sub>Stats include private repositories as aggregate counts only — no private names, code, or details are ever published.<br>Refreshed every 30 minutes by <a href=".github/workflows/refresh.yml">GitHub Actions</a>.</sub>
 
-I care about the unglamorous parts that make software dependable: bounded retries, useful failure states, reproducible tests, explicit security boundaries, and documentation that still helps after the context has faded.
-
-<p align="center">
-  <a href="https://github.com/Anoop-Kondepudi?tab=repositories">Explore the repositories</a>
-  &nbsp;&middot;&nbsp;
-  <a href="https://github.com/Anoop-Kondepudi?tab=stars">See what I am learning from</a>
-</p>
-
-<!--
-The metrics card is refreshed by .github/workflows/metrics.yml when the
-PROFILE_METRICS_TOKEN repository secret is configured.
--->
+</div>

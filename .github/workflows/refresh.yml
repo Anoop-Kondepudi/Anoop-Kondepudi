@@ -1,0 +1,41 @@
+name: Refresh profile cards
+
+on:
+  schedule:
+    - cron: "*/30 * * * *"
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: refresh-cards
+  cancel-in-progress: true
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Render cards from live data
+        env:
+          PROFILE_TOKEN: ${{ secrets.PROFILE_TOKEN }}
+          # Optional: refreshed by local jobs on Anoop's machine; both fall
+          # back to platform.json when unset.
+          PLATFORM_LLM_TOKENS: ${{ vars.PLATFORM_LLM_TOKENS }}
+          PLATFORM_VERCEL_REQUESTS: ${{ vars.PLATFORM_VERCEL_REQUESTS }}
+          PLATFORM_VERCEL_WINDOW: ${{ vars.PLATFORM_VERCEL_WINDOW }}
+        run: python3 scripts/generate.py
+
+      - name: Publish to the render branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout --orphan render
+          git reset
+          git add -f assets/*.svg
+          git commit -m "render $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          git push -f origin render
