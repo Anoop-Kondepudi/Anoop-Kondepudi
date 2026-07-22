@@ -114,7 +114,7 @@ def fetch_loc(token: str, repo_names: list[str], year_epoch: int) -> dict:
 
 
 STATS_URL = os.environ.get(
-    "STATS_URL", "https://studysolutions.app/api/public/profile-stats")
+    "STATS_URL", "https://www.studysolutions.app/api/public/profile-stats")
 
 
 def fetch_platform_stats() -> dict:

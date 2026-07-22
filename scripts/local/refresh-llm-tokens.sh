@@ -6,7 +6,7 @@
 #
 # Installed as a LaunchAgent (see com.anoop-kondepudi.profile-llm-tokens.plist).
 set -euo pipefail
-export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
+export PATH="/opt/homebrew/opt/node@24/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:$PATH"
 
 TOKENS=$(npx -y ccusage@latest --json 2>/dev/null \
   | python3 -c "import json,sys; print(json.load(sys.stdin)['totals']['totalTokens'])")
