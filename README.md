@@ -5,15 +5,10 @@
   <img alt="Engineering ledger — commits, lines of code changed, merged pull requests this year, all-time contributions, and language mix across public and private repositories (aggregates only)" src="https://raw.githubusercontent.com/Anoop-Kondepudi/Anoop-Kondepudi/render/assets/activity-light.svg" width="100%">
 </picture>
 
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Anoop-Kondepudi/Anoop-Kondepudi/render/assets/production-dark.svg">
-  <img alt="Production platform stats — millions of requests per day across the edge and API layers, documents processed, and live Discord community size" src="https://raw.githubusercontent.com/Anoop-Kondepudi/Anoop-Kondepudi/render/assets/production-light.svg" width="100%">
-</picture>
-
 <a href="https://studysolutions.app/">
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Anoop-Kondepudi/Anoop-Kondepudi/render/assets/studysolutions-dark.svg">
-  <img alt="StudySolutions — AI-powered study platform, live at studysolutions.app" src="https://raw.githubusercontent.com/Anoop-Kondepudi/Anoop-Kondepudi/render/assets/studysolutions-light.svg" width="100%">
+  <img alt="StudySolutions — AI-powered study platform, live at studysolutions.app, with live Discord community and registered-user counts" src="https://raw.githubusercontent.com/Anoop-Kondepudi/Anoop-Kondepudi/render/assets/studysolutions-light.svg" width="100%">
 </picture>
 </a>
 

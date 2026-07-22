@@ -309,10 +309,6 @@ def compute(raw: dict) -> dict:
             platform[key] = int(live[key])
             live_fields.append(label)
 
-    # daily local jobs push these as Actions variables
-    if os.environ.get("PLATFORM_VERCEL_REQUESTS"):
-        platform["vercel_requests"] = int(os.environ["PLATFORM_VERCEL_REQUESTS"])
-        platform["vercel_window"] = os.environ.get("PLATFORM_VERCEL_WINDOW", "LAST 24 HOURS")
     platform["live_fields"] = live_fields
 
     discord = raw.get("discord_members") or platform.get("discord_members_fallback")
@@ -588,51 +584,8 @@ def card_activity(m: dict, t: dict) -> str:
                      f"with language mix across public and private repositories")
 
 
-def card_production(m: dict, t: dict) -> str:
-    H = 300
-    mono = FONT_FAMILIES["mono"][0]
-    serif = FONT_FAMILIES["serif"][0]
-    ink, muted = t["ink"], t["muted"]
-    p = m["platform"]
-
-    rows = [
-        (f"EDGE REQUESTS · VERCEL · {p.get('vercel_window', '')}".rstrip(" ·"),
-         fmt(int(p["vercel_requests"])) if p.get("vercel_requests") else "—"),
-        ("API REQUESTS · SUPABASE · LAST 24 HOURS",
-         fmt(int(p["supabase_requests_24h"])) if p.get("supabase_requests_24h") else "—"),
-        ("AI DETECTION CHECKS PROCESSED · ALL-TIME",
-         fmt(int(p["ai_checks_all_time"])) if p.get("ai_checks_all_time") else "—"),
-        ("DISCORD COMMUNITY MEMBERS · LIVE",
-         fmt(int(m["discord"])) if m["discord"] else "—"),
-        ("REGISTERED USERS",
-         fmt(int(p["registered_users"])) if p.get("registered_users") else "—"),
-    ]
-    row_svg = "".join(ledger_row(lbl, val, 104 + i * 35, t) for i, (lbl, val) in enumerate(rows))
-    as_of = datetime.fromisoformat(p["as_of"]).strftime("%b %d").upper() if p.get("as_of") else "—"
-    live_names = " · ".join(["DISCORD"] + p.get("live_fields", []))
-    footnote = f"LIVE AT EACH RENDER: {live_names} — OTHER FIGURES AS OF {as_of}"
-
-    body = f"""
-  <rect x="1" y="1" width="{W - 2}" height="{H - 2}" rx="13" fill="url(#corner)"/>
-  <g>
-    <text x="34" y="49" font-family="{serif}" font-style="italic" font-size="25" fill="{ink}">Production</text>
-    {live_dot(180, 44.5, t)}
-    <text x="192" y="47" font-family="{mono}" font-size="9" letter-spacing="1.5" fill="{muted}">PULLED FROM LIVE SYSTEMS</text>
-    <text x="{W - 36}" y="47" text-anchor="end" font-family="{mono}" font-size="9" letter-spacing="1.5" fill="{muted}">WHOLE NUMBERS · NO ESTIMATES</text>
-  </g>
-  <line x1="36" y1="66" x2="{W - 36}" y2="66" stroke="{t['hairline']}"/>
-  {row_svg}
-  <g>
-    <text x="36" y="{H - 28}" font-family="{mono}" font-size="9" letter-spacing="1.2" fill="{muted}">{footnote}</text>
-  </g>"""
-    return svg_shell("production", t, H, ["serif", "mono", "monobold"], body,
-                     "Production stats: tens of millions of edge requests, millions of "
-                     "database requests per day, AI detection checks processed, Discord "
-                     "community size, and registered users")
-
-
 def card_product(m: dict, t: dict) -> str:
-    H = 196
+    H = 268
     mono, monob = FONT_FAMILIES["mono"][0], FONT_FAMILIES["monobold"][0]
     serif = FONT_FAMILIES["serif"][0]
     ink, sub, muted, accent = t["ink"], t["sub"], t["muted"], t["accent"]
@@ -672,7 +625,10 @@ def card_product(m: dict, t: dict) -> str:
     <rect x="{cta_x:.1f}" y="138" width="{cta_w:.1f}" height="28" rx="7" fill="{t['accent_soft']}" stroke="{t['accent_border']}"/>
     <text x="{cta_x + 18:.1f}" y="156" font-family="{monob}" font-weight="600" font-size="11" letter-spacing="1.4" fill="{accent}">{cta}</text>
     <path d="M{cta_x + cta_w - 20:.1f} 156 l7 -7 m0 0 h-6 m6 0 v6" stroke="{accent}" stroke-width="1.4" fill="none" stroke-linecap="round"/>
-  </g>"""
+  </g>
+  <line x1="36" y1="184" x2="{W - 36}" y2="184" stroke="{t['hairline']}"/>
+  {ledger_row("DISCORD COMMUNITY MEMBERS", fmt(int(m["discord"])) if m["discord"] else "—", 210, t)}
+  {ledger_row("REGISTERED USERS", fmt(int(m["platform"]["registered_users"])) if m["platform"].get("registered_users") else "—", 244, t)}"""
     return svg_shell("studysolutions", t, H, ["serif", "mono", "monobold"], body,
                      "StudySolutions — AI-powered study platform, live at studysolutions.app",
                      accent_border=True)
@@ -759,12 +715,11 @@ def main() -> None:
     ASSETS.mkdir(exist_ok=True)
     for theme in (DARK, LIGHT):
         (ASSETS / f"activity-{theme['id']}.svg").write_text(card_activity(m, theme))
-        (ASSETS / f"production-{theme['id']}.svg").write_text(card_production(m, theme))
         (ASSETS / f"studysolutions-{theme['id']}.svg").write_text(card_product(m, theme))
         for proj in FEATURED:
             (ASSETS / f"{proj['file']}-{theme['id']}.svg").write_text(
                 card_project(proj["name"], proj["desc"], proj["langs"], proj["note"], theme))
-    print(f"Rendered {2 * (3 + len(FEATURED))} cards. "
+    print(f"Rendered {2 * (2 + len(FEATURED))} cards. "
           f"{fmt(m['total_all_time'])} contributions all-time, streak {m['streak']}.")
 
 
