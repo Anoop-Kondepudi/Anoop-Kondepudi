@@ -324,7 +324,6 @@ def compute(raw: dict) -> dict:
         "commits_y": loc_year.get("commits", 0),
         "lines_y": loc_year.get("additions", 0) + loc_year.get("deletions", 0),
         "prs_merged_y": raw.get("prs_merged_year", 0),
-        "tokens": int(os.environ.get("PLATFORM_LLM_TOKENS") or platform.get("llm_tokens") or 0) or None,
         "discord": discord,
         "platform": platform,
         "ytd": ytd,
@@ -508,53 +507,6 @@ def live_dot(x: float, y: float, theme: dict, color: str | None = None) -> str:
 # Cards
 # --------------------------------------------------------------------------
 
-def card_hero(m: dict, t: dict) -> str:
-    H = 212
-    now = m["now"]
-    push = rel_time(m["last_push"], now)
-    mono, ink, sub, muted, accent = (
-        FONT_FAMILIES["mono"][0], t["ink"], t["sub"], t["muted"], t["accent"])
-    disp = FONT_FAMILIES["disp"][0]
-    serif = FONT_FAMILIES["serif"][0]
-
-    # right-edge ornament: concentric hairline arcs
-    arcs = "".join(
-        f'<circle cx="{W - 26}" cy="{H // 2}" r="{r}" fill="none" '
-        f'stroke="{accent}" stroke-opacity="{o}" stroke-width="1"/>'
-        for r, o in [(38, 0.30), (66, 0.20), (96, 0.13), (128, 0.08), (162, 0.05), (198, 0.03)]
-    )
-
-    right_label = f"LAST PUSH · {push}"
-    rl_w = mono_w(right_label, 10, 1.6)
-
-    body = f"""
-  <rect x="1" y="1" width="{W - 2}" height="{H - 2}" rx="13" fill="url(#corner)"/>
-  <g clip-path="url(#heroclip)">{arcs}</g>
-  <clipPath id="heroclip"><rect x="1" y="1" width="{W - 2}" height="{H - 2}" rx="13"/></clipPath>
-
-  <g>
-    <text x="36" y="47" font-family="{mono}" font-size="10" letter-spacing="1.6" fill="{muted}">ENGINEER — AI SYSTEMS &amp; PRODUCT</text>
-    {live_dot(W - 52 - rl_w, 43.5, t)}
-    <text x="{W - 36}" y="47" text-anchor="end" font-family="{mono}" font-size="10" letter-spacing="1.6" fill="{sub}">{right_label}</text>
-  </g>
-
-  <g>
-    <text x="34" y="110" font-family="{disp}" font-weight="600" font-size="46" letter-spacing="-0.8" fill="{ink}">{DISPLAY_NAME}</text>
-  </g>
-  <g>
-    <text x="36" y="150" font-family="{serif}" font-style="italic" font-size="26" fill="{sub}">Custom AI models. Autonomous pipelines. <tspan fill="{accent}">Millions of requests a day.</tspan></text>
-  </g>
-
-  <line x1="36" y1="172" x2="{W - 36}" y2="172" stroke="{t['hairline']}"/>
-  <g font-family="{mono}" font-size="9.5" letter-spacing="1.6">
-    <text x="36" y="192" fill="{muted}">{fmt(m['total_all_time'])} CONTRIBUTIONS · ALL-TIME</text>
-    <text x="{W // 2}" y="192" text-anchor="middle" fill="{muted}">{m['repo_count']} REPOSITORIES · {m['private_count']} PRIVATE</text>
-    <text x="{W - 36}" y="192" text-anchor="end" fill="{muted}">SHIPPING SINCE {m['since_year']}</text>
-  </g>"""
-    return svg_shell("hero", t, H, ["disp", "serif", "mono"], body,
-                     f"{DISPLAY_NAME} — building StudySolutions, AI study tools in production")
-
-
 def ledger_row(label: str, value: str, baseline: int, t: dict) -> str:
     """One accounting-ledger row: label, dotted leader, right-aligned exact value."""
     mono, monob = FONT_FAMILIES["mono"][0], FONT_FAMILIES["monobold"][0]
@@ -575,81 +527,23 @@ def ledger_row(label: str, value: str, baseline: int, t: dict) -> str:
     )
 
 
-def heatmap(days: dict, today: date, t: dict, x0: int, y0: int) -> tuple[str, int]:
-    """GitHub-style 52-week contribution heatmap in the brand ramp.
-
-    Returns (svg, height). Color buckets are quartiles of nonzero days, so the
-    quiet months stay readable next to 100+-contribution peaks.
-    """
-    mono = FONT_FAMILIES["mono"][0]
-    start = today - timedelta(days=364)
-    start -= timedelta(days=(start.weekday() + 1) % 7)  # back to Sunday
-    window = []
-    d = start
-    while d <= today:
-        window.append((d, days.get(d.isoformat(), 0)))
-        d += timedelta(days=1)
-    nonzero = sorted(c for _, c in window if c > 0)
-
-    def q(p: float) -> int:
-        return nonzero[min(int(len(nonzero) * p), len(nonzero) - 1)] if nonzero else 1
-
-    q1, q2, q3 = q(0.25), q(0.5), q(0.75)
-
-    def bucket(c: int) -> int:
-        if c == 0:
-            return 0
-        if c <= q1:
-            return 1
-        if c <= q2:
-            return 2
-        if c <= q3:
-            return 3
-        return 4
-
-    ramp = t["heat_ramp"]
-    pitch = 808 / 53
-    cell = pitch - 3.2
-    cells, month_labels = [], []
-    seen_month = None
-    for day, count in window:
-        week = ((day - start).days) // 7
-        row = (day.weekday() + 1) % 7
-        x = x0 + week * pitch
-        y = y0 + row * pitch
-        cells.append(
-            f'<rect x="{x:.1f}" y="{y:.1f}" width="{cell:.1f}" height="{cell:.1f}" '
-            f'rx="2.5" fill="{ramp[bucket(count)]}"/>'
-        )
-        if day.day == 1 and day.month != seen_month:
-            seen_month = day.month
-            month_labels.append(
-                f'<text x="{x:.1f}" y="{y0 - 8}" font-family="{mono}" font-size="8" '
-                f'letter-spacing="1" fill="{t["muted"]}">{day.strftime("%b").upper()}</text>'
-            )
-    height = int(7 * pitch)
-    return "".join(month_labels) + "".join(cells), height
-
-
 def card_activity(m: dict, t: dict) -> str:
-    H = 456
+    H = 318
     mono = FONT_FAMILIES["mono"][0]
     serif = FONT_FAMILIES["serif"][0]
     ink, sub, muted = t["ink"], t["sub"], t["muted"]
+    push = rel_time(m["last_push"], m["now"])
 
     rows = [
         (f"COMMITS · {m['year']}", fmt(m["commits_y"])),
         (f"LINES OF CODE CHANGED · {m['year']}", fmt(m["lines_y"])),
         (f"PULL REQUESTS MERGED · {m['year']}", fmt(m["prs_merged_y"])),
-        (f"LLM TOKENS · CLAUDE + CODEX · {m['year']}",
-         fmt(int(m["tokens"])) if m["tokens"] else "—"),
+        ("CONTRIBUTIONS · ALL-TIME", fmt(m["total_all_time"])),
     ]
     row_svg = "".join(ledger_row(lbl, val, 104 + i * 35, t) for i, (lbl, val) in enumerate(rows))
 
-    heat_svg, heat_h = heatmap(m["days"], m["now"].date(), t, 36, 286)
-
-    # language bar under the heatmap
-    by0, bh = 286 + heat_h + 26, 8
+    # language bar
+    by0, bh = 258, 8
     bar_w = W - 72
     gaps = 2
     lang_parts, legend_parts = "", ""
@@ -670,28 +564,18 @@ def card_activity(m: dict, t: dict) -> str:
         )
         lx_cursor += 12 + mono_w(label, 9.5, 0.8) + 22
 
-    legend_ramp = "".join(
-        f'<rect x="{W - 36 - 90 + i * 13}" y="252" width="9" height="9" rx="2" fill="{c}"/>'
-        for i, c in enumerate(t["heat_ramp"])
-    )
     updated = m["now"].strftime("%b %d · %H:%M UTC").upper()
 
     body = f"""
   <g>
     <text x="34" y="49" font-family="{serif}" font-style="italic" font-size="25" fill="{ink}">The ledger</text>
-    <text x="172" y="47" font-family="{mono}" font-size="9" letter-spacing="1.5" fill="{muted}">PUBLIC + PRIVATE · AGGREGATES ONLY</text>
-    <text x="{W - 36}" y="47" text-anchor="end" font-family="{mono}" font-size="9" letter-spacing="1.5" fill="{muted}">REFRESHED EVERY 30 MIN · {updated}</text>
+    {live_dot(180, 44.5, t)}
+    <text x="192" y="47" font-family="{mono}" font-size="9" letter-spacing="1.5" fill="{sub}">LAST PUSH · {push}</text>
+    <text x="{W - 36}" y="47" text-anchor="end" font-family="{mono}" font-size="9" letter-spacing="1.5" fill="{muted}">PUBLIC + PRIVATE · REFRESHED EVERY 30 MIN · {updated}</text>
   </g>
   <line x1="36" y1="66" x2="{W - 36}" y2="66" stroke="{t['hairline']}"/>
   {row_svg}
   <line x1="36" y1="232" x2="{W - 36}" y2="232" stroke="{t['hairline']}"/>
-  <g>
-    <text x="36" y="260" font-family="{mono}" font-size="9" letter-spacing="1.5" fill="{muted}">CONTRIBUTIONS · LAST 12 MONTHS — EVERY REPOSITORY</text>
-    <text x="{W - 36 - 98}" y="260" text-anchor="end" font-family="{mono}" font-size="8" letter-spacing="1" fill="{muted}">LESS</text>
-    {legend_ramp}
-    <text x="{W - 36}" y="260" text-anchor="end" font-family="{mono}" font-size="8" letter-spacing="1" fill="{muted}">MORE</text>
-  </g>
-  {heat_svg}
   <g>
     {lang_parts}
     {legend_parts}
@@ -700,8 +584,8 @@ def card_activity(m: dict, t: dict) -> str:
     return svg_shell("activity", t, H, ["serif", "mono", "monobold"], body,
                      f"Engineering ledger {m['year']}: {fmt(m['commits_y'])} commits, "
                      f"{fmt(m['lines_y'])} lines of code changed, {fmt(m['prs_merged_y'])} "
-                     f"pull requests merged, {fmt(int(m['tokens'])) if m['tokens'] else 'billions of'} LLM tokens, "
-                     f"with a 12-month contribution heatmap and language mix")
+                     f"pull requests merged, {fmt(m['total_all_time'])} contributions all-time, "
+                     f"with language mix across public and private repositories")
 
 
 def card_production(m: dict, t: dict) -> str:
@@ -874,14 +758,13 @@ def main() -> None:
     m = compute(raw)
     ASSETS.mkdir(exist_ok=True)
     for theme in (DARK, LIGHT):
-        (ASSETS / f"hero-{theme['id']}.svg").write_text(card_hero(m, theme))
         (ASSETS / f"activity-{theme['id']}.svg").write_text(card_activity(m, theme))
         (ASSETS / f"production-{theme['id']}.svg").write_text(card_production(m, theme))
         (ASSETS / f"studysolutions-{theme['id']}.svg").write_text(card_product(m, theme))
         for proj in FEATURED:
             (ASSETS / f"{proj['file']}-{theme['id']}.svg").write_text(
                 card_project(proj["name"], proj["desc"], proj["langs"], proj["note"], theme))
-    print(f"Rendered {2 * (4 + len(FEATURED))} cards. "
+    print(f"Rendered {2 * (3 + len(FEATURED))} cards. "
           f"{fmt(m['total_all_time'])} contributions all-time, streak {m['streak']}.")
 
 

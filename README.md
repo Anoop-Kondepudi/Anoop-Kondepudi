@@ -1,13 +1,8 @@
 <div align="center">
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Anoop-Kondepudi/Anoop-Kondepudi/render/assets/hero-dark.svg">
-  <img alt="Anoop Kondepudi — engineer building StudySolutions, AI study tools in production" src="https://raw.githubusercontent.com/Anoop-Kondepudi/Anoop-Kondepudi/render/assets/hero-light.svg" width="100%">
-</picture>
-
-<picture>
   <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Anoop-Kondepudi/Anoop-Kondepudi/render/assets/activity-dark.svg">
-  <img alt="Engineering ledger — commits, lines changed, merged pull requests, and LLM tokens this year, with contribution trend and language mix across public and private repositories (aggregates only)" src="https://raw.githubusercontent.com/Anoop-Kondepudi/Anoop-Kondepudi/render/assets/activity-light.svg" width="100%">
+  <img alt="Engineering ledger — commits, lines of code changed, merged pull requests this year, all-time contributions, and language mix across public and private repositories (aggregates only)" src="https://raw.githubusercontent.com/Anoop-Kondepudi/Anoop-Kondepudi/render/assets/activity-light.svg" width="100%">
 </picture>
 
 <picture>

@@ -23,9 +23,8 @@ jobs:
       - name: Render cards from live data
         env:
           PROFILE_TOKEN: ${{ secrets.PROFILE_TOKEN }}
-          # Optional: refreshed by local jobs on Anoop's machine; both fall
-          # back to platform.json when unset.
-          PLATFORM_LLM_TOKENS: ${{ vars.PLATFORM_LLM_TOKENS }}
+          # Optional: refreshed by the daily local dashboard-reader task;
+          # falls back to platform.json when unset.
           PLATFORM_VERCEL_REQUESTS: ${{ vars.PLATFORM_VERCEL_REQUESTS }}
           PLATFORM_VERCEL_WINDOW: ${{ vars.PLATFORM_VERCEL_WINDOW }}
         run: python3 scripts/generate.py
