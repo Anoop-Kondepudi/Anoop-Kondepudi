@@ -755,7 +755,7 @@ def card_product(m: dict, t: dict) -> str:
 
     platform_line = f"{m['platform'].get('locales', 21)} LOCALES · EST 2024"
 
-    chips = ["NEXT.JS", "TYPESCRIPT", "SUPABASE", "POSTGRES", "STRIPE"]
+    chips = ["NEXT.JS", "TYPESCRIPT", "SUPABASE", "STRIPE", "OPENAI", "MODAL"]
     chip_svg, cx = "", 36.0
     for c in chips:
         cw = mono_w(c, 9, 1.2) + 20
@@ -811,7 +811,7 @@ def card_project(name: str, desc_lines: list[str], langs: list[tuple[str, str]],
             f'<circle cx="{lx + 3:.1f}" cy="{H - 29}" r="3" fill="{color}"/>'
             f'<text x="{lx + 11:.1f}" y="{H - 25.5}" font-family="{mono}" font-size="9" letter-spacing="1" fill="{muted}">{lname.upper()}</text>'
         )
-        lx += 11 + mono_w(lname, 9, 1) + 16
+        lx += 11 + mono_w(lname, 9, 1) + 12
 
     body = f"""
   <g>
@@ -839,14 +839,16 @@ FEATURED = [
         "file": "meet2code",
         "name": "meet2code",
         "desc": ["Agentic meeting-to-PR pipeline — live transcription", "becomes issues, plans, code, and pull requests."],
-        "langs": [("TypeScript", "#3178c6"), ("Python", "#3572A5")],
+        "langs": [("Python", "#3572A5"), ("AssemblyAI", "#4f68f0"),
+                  ("Claude Code", "#d97757"), ("GitHub", "#8b949e")],
         "note": "HACKATHON BUILD · 2026",
     },
     {
         "file": "openstreet",
         "name": "OpenStreet",
         "desc": ["Civic data platform — one transparent view of local", "data for residents and city governments."],
-        "langs": [("TypeScript", "#3178c6"), ("Mapbox", "#4264fb")],
+        "langs": [("TypeScript", "#3178c6"), ("OpenAI", "#10a37f"),
+                  ("Mapbox", "#4264fb"), ("Auth0", "#eb5424")],
         "note": "HACKATHON BUILD · 2025",
     },
 ]
